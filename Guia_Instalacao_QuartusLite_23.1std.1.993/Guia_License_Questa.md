@@ -3,7 +3,7 @@ Ativando a Licença para o simulador Questa-Intel® FPGA
 
 #### 1. Acesse o Intel® FPGA Self-Service Licensing Center
 
-[[httpslicensing.intel.com](https://licensing.intel.com)](https://licensing.intel.com)
+[https://licensing.intel.com/](https://licensing.intel.com/)
 
 #### 2. Clique em Enroll para criar uma conta
 
