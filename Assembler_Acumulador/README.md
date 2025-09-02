@@ -1,6 +1,6 @@
 # Assembler
 
-Monstador assembler utilizando linguagem python.
+Montador assembler utilizando linguagem python.
 
 ## Objetivos
 
