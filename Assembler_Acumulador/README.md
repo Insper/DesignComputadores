@@ -88,17 +88,17 @@ mne = {
 
 ## OBS:
 
-1) Para qualquer insturção implementada, lembre-se de também adicionar a mesma no dicionário de mnemônicos
+1) Para qualquer instrução implementada, lembre-se de também adicionar a mesma no dicionário de mnemônicos
 2) Esse programa também formata o código ASM para arquivo um .mif, no seguinte padrão:
 
 ```vhdl
 WIDTH=13;
 DEPTH=256;
 ADDRESS_RADIX=DEC;
-DATA_RADIX=HEX;
+DATA_RADIX=BIN;
 
 CONTENT BEGIN
 --endereco   :   dado
-     0       :    90E;
+     0	:	1001000001110;	-- JSR .JMP_14  #Deve desviar para a posição 14
 ```
 
