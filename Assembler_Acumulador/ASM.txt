@@ -1,16 +1,22 @@
-JSR @14	#Deve desviar para a posição 14
-JMP @5	#Deve desviar para a posição 5
-JEQ @9	#Deve desviar para a posição 9
+JSR .JMP_14	#Deve desviar para a posição 14
+JMP .VOA5	#Deve desviar para a posição 5
+JEQ .VAIPRANOVE	#Deve desviar para a posição 9
 NOP
 NOP
+VOA5:
+
+
 LDI $5	#Carrega acumulador com valor 5
 STA $0	#Armazena 5 na posição 0 da memória
 CEQ @0	#A Comparação deve fazer o flagIgual ser 1
 JMP @2	#Vai testar o flagIgual depois do jump
+VAIPRANOVE:
+
+
 NOP
 LDI $4	#Carrega acumulador com valor 4
 CEQ @0	#Compara com valor 5, deve fazer o flagIgual ser 0
 JEQ @3	#Não deve ocorrer o desvio
 JMP @13	#Fim. Deve ficar neste laço
-NOP
+JMP_14: NOP
 RET		#Retorna para a posição 1
