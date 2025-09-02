@@ -1,6 +1,6 @@
 # Assembler
 
-Questão: Como criar um montador (assembler) utilizando python ?
+Monstador assembler utilizando linguagem python.
 
 ## Objetivos
 
