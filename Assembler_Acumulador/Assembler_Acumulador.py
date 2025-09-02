@@ -148,9 +148,8 @@ def escreve_bin(saida: list[str], filename="BIN.txt"):
 # ==========================
 def escreve_mif(saida: list[str], filename="initROM.mif"):
     header = [
-        "WIDTH=9;\n",
+        "WIDTH=13;\n",
         "DEPTH=32;\n",
-        "\n",
         "ADDRESS_RADIX=DEC;\n",
         "DATA_RADIX=BIN;\n",
         "\n",
