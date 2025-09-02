@@ -1,6 +1,6 @@
 ## Objetivo
 
-Implementação de um programa em linguagem python que traduz seu código assembly em linguagem de máquina do processador desenvolvido na disciplina Design de Computadores - Engenharia de Computação (INSPER).
+Implementação de um programa em linguagem python que traduz o código assembly em linguagem de máquina do processador desenvolvido na disciplina Design de Computadores - Engenharia de Computação (INSPER).
 
 ## Contextualização
 
