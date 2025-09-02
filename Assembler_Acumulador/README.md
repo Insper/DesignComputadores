@@ -85,7 +85,8 @@ mne = {
 ## OBS:
 
 1) Para qualquer instrução implementada, lembre-se de também adicionar a mesma no dicionário de mnemônicos
-2) Esse programa também formata o código ASM para arquivo um .mif, no seguinte padrão:
+2) O Programa entende tanto endereçamento direto como JMP @14, como utilizando labels JMP .JML_14
+3) Esse programa também formata o código ASM para arquivo um .mif, no seguinte padrão:
 
 ```vhdl
 WIDTH=13;
