@@ -1,0 +1,16 @@
+tmp(0) := x"9" & '0' & x"0E";	-- JSR .JMP_14  #Deve desviar para a posição 14
+tmp(1) := x"6" & '0' & x"05";	-- JMP .VOA5  #Deve desviar para a posição 5
+tmp(2) := x"7" & '0' & x"09";	-- JEQ .VAIPRANOVE  #Deve desviar para a posição 9
+tmp(3) := x"0" & '0' & x"00;	-- NOP
+tmp(4) := x"0" & '0' & x"00;	-- NOP
+tmp(5) := x"4" & '1' & x"05";	-- LDI $5  #Carrega acumulador com valor 5
+tmp(6) := x"5" & '1' & x"00";	-- STA $0  #Armazena 5 na posição 0 da memória
+tmp(7) := x"8" & '0' & x"00";	-- CEQ @0  #A Comparação deve fazer o flagIgual ser 1
+tmp(8) := x"6" & '0' & x"02";	-- JMP @2  #Vai testar o flagIgual depois do jump
+tmp(9) := x"0" & '0' & x"00;	-- NOP
+tmp(10) := x"4" & '1' & x"04";	-- LDI $4  #Carrega acumulador com valor 4
+tmp(11) := x"8" & '0' & x"00";	-- CEQ @0  #Compara com valor 5, deve fazer o flagIgual ser 0
+tmp(12) := x"7" & '0' & x"03";	-- JEQ @3  #Não deve ocorrer o desvio
+tmp(13) := x"6" & '0' & x"0D";	-- JMP @13  #Fim. Deve ficar neste laço
+tmp(14) := x"0" & '0' & x"00;	-- NOP
+tmp(15) := x"A" & '0' & x"00;	-- RET  #Retorna para a posição 1
