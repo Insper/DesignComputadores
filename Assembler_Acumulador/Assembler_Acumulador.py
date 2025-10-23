@@ -36,9 +36,9 @@ allowed_prefixes = {
     "JMP": {"@", ".", "raw"},
     "JEQ": {"@", ".", "raw"},
     "JSR": {"@", ".", "raw"},
-    "CEQ": {"@"},   # ✅ só @
-    "SOMA": {"@"},  # ✅ só @
-    "SUB": {"@"},   # ✅ só @
+    "CEQ": {"@"},
+    "SOMA": {"@"},
+    "SUB": {"@"},
     "NOP": set(),
     "RET": set(),
 }
