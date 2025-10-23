@@ -27,27 +27,33 @@ mne = {
 }
 
 # ==========================
-# Regras de prefixos permitidos
+# Regras de prefixos permitidos por instrução
+# Agora NÃO existe 'raw' — argumentos sem prefixo são inválidos.
+# Labels ('.') são permitidas somente para instruções de salto: JMP, JEQ, JSR.
 # ==========================
 allowed_prefixes = {
     "LDI": {"$"},
-    "LDA": {"@", ".", "raw"},
-    "STA": {"@", ".", "raw"},
-    "JMP": {"@", ".", "raw"},
-    "JEQ": {"@", ".", "raw"},
-    "JSR": {"@", ".", "raw"},
+    "LDA": {"@"},
+    "STA": {"@"},
+    "JMP": {"@", "."},
+    "JEQ": {"@", "."},
+    "JSR": {"@", "."},
     "CEQ": {"@"},
     "SOMA": {"@"},
     "SUB": {"@"},
     "NOP": set(),
     "RET": set(),
 }
-allowed_default = {"$", "@", ".", "raw"}
+# por segurança, mnemônicos não listados explicitamente não aceitam argumentos
+allowed_default = set()
 
 # ==========================
 # Auxiliares
 # ==========================
 def _arg_prefix_kind(arg: str) -> str:
+    """
+    Retorna um dos: '$', '@', '.', ou 'noprefix' (quando não há símbolo).
+    """
     if arg is None:
         return None
     if arg.startswith("$"):
@@ -56,32 +62,50 @@ def _arg_prefix_kind(arg: str) -> str:
         return "@"
     if arg.startswith("."):
         return "."
-    return "raw"
+    return "noprefix"  # agora tratamos como erro posteriormente
 
 def _validate_arg_for_mnemonic(mnemonic: str, arg: str):
+    """
+    Valida se o tipo de prefixo do argumento é permitido para o mnemônico.
+    Levanta ValueError com mensagem clara quando inválido.
+    """
     pref = _arg_prefix_kind(arg)
     allowed = allowed_prefixes.get(mnemonic, allowed_default)
+
     if pref is None:
+        # nenhum argumento — tudo bem se a instrução aceitar sem argumento
         return
+
+    if pref == "noprefix":
+        raise ValueError(f"Mnemônico {mnemonic} não aceita argumento sem prefixo. Use '@', '$' ou '.' conforme apropriado.")
+
     if pref not in allowed:
-        pref_name = "número (sem prefixo)" if pref == "raw" else f"'{pref}'"
+        pref_name = f"'{pref}'"
         allowed_readable = []
         for p in sorted(allowed):
-            allowed_readable.append("número (sem prefixo)" if p == "raw" else f"'{p}'")
+            if p == ".":
+                allowed_readable.append("'.' (label)")
+            else:
+                allowed_readable.append(f"'{p}'")
         allowed_str = ", ".join(allowed_readable) if allowed_readable else "nenhum"
-        raise ValueError(
-            f"Mnemônico {mnemonic} não aceita argumento do tipo {pref_name}. Tipos permitidos: {allowed_str}."
-        )
+        raise ValueError(f"Mnemônico {mnemonic} não aceita argumento do tipo {pref_name}. Tipos permitidos: {allowed_str}.")
 
 # ==========================
 # Conversão de argumentos
 # ==========================
 def converte_argumento(arg: str, label_table: dict) -> str:
+    """
+    Converte apenas argumentos com prefixo '$', '@' ou '.'.
+    Argumentos sem prefixo são considerados inválidos — essa validação deve ocorrer antes.
+    """
     if arg is None:
         return "'0' & x\"00\""
 
     if arg.startswith('@'):
-        valor = int(arg[1:])
+        try:
+            valor = int(arg[1:])
+        except ValueError:
+            raise ValueError(f"Argumento inválido para endereço: {arg}")
         if valor > 0xFF:
             print(f"{YELLOW}[Aviso] @{valor} > 255 — truncando para {valor & 0xFF} e marcando como imediato.{RESET}")
             valor &= 0xFF
@@ -89,7 +113,10 @@ def converte_argumento(arg: str, label_table: dict) -> str:
         return "'0' & x\"" + format(valor, "02X") + "\""
 
     elif arg.startswith('$'):
-        valor = int(arg[1:])
+        try:
+            valor = int(arg[1:])
+        except ValueError:
+            raise ValueError(f"Argumento inválido para imediato: {arg}")
         if valor < 0 or valor > 0xFF:
             print(f"{YELLOW}[Aviso] ${valor} fora de 8 bits — truncando para {valor & 0xFF}.{RESET}")
         return "'1' & x\"" + format(valor & 0xFF, "02X") + "\""
@@ -105,11 +132,8 @@ def converte_argumento(arg: str, label_table: dict) -> str:
         return "'0' & x\"" + format(valor, "02X") + "\""
 
     else:
-        valor = int(arg)
-        if valor > 0xFF:
-            print(f"{YELLOW}[Aviso] Valor {valor} > 255 — truncando para {valor & 0xFF}.{RESET}")
-            return "'1' & x\"" + format(valor & 0xFF, "02X") + "\""
-        return "'0' & x\"" + format(valor, "02X") + "\""
+        # não deve ocorrer: validamos antes para rejeitar 'noprefix'
+        raise ValueError(f"Argumento sem prefixo inválido: {arg}")
 
 # ==========================
 # Monta instrução completa
@@ -173,7 +197,7 @@ def processa_asm(linhas, label_table):
             if not original:
                 continue
 
-        match = re.match(r"^(?P<mnemonic>\w+)(?:\s+(?P<arg>[.@$\w\d]+))?(?:\s*#(?P<comment>.*))?$", original)
+        match = re.match(r"^(?P<mnemonic>\w+)(?:\s+(?P<arg>\S+))?(?:\s*#(?P<comment>.*))?$", original)
         if not match:
             msg = f"Linha {lineno}: sintaxe inválida -> '{original}'"
             print(f"{RED}[Erro] {msg}{RESET}")
@@ -243,13 +267,14 @@ if __name__ == "__main__":
     saida, errors = processa_asm(linhas, label_table)
 
     if errors:
-        # Se houve erro — gerar BIN com banner centralizado
+        # Se houve erro — gerar BIN com banner centralizado (53 caracteres por linha)
         print(f"{RED}[ERRO] {len(errors)} erro(s) detectado(s). Gerando BIN de erro...{RESET}")
         with open("BIN.txt", "w") as f:
             f.write("#####################################################\n")
             f.write("################## ERRO NO ASSEMBLY ##################\n")
             f.write("#####################################################\n")
         print(f"{RED}[ERRO] Assembly inválido — BIN.txt gerado com aviso de erro.{RESET}")
+        # opcional: imprimir resumo dos erros no terminal (já impresso durante parsing)
         sys.exit(1)
     else:
         escreve_bin(saida)
