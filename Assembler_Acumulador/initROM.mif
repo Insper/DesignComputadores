@@ -7,12 +7,17 @@ CONTENT BEGIN
 	0	:	1001000001110;	-- JSR .JMP_14  #Deve desviar para a posição 14
 	1	:	0110000000101;	-- JMP .VOA5  #Deve desviar para a posição 5
 	2	:	0111000001001;	-- JEQ .VAIPRANOVE  #Deve desviar para a posição 9
+	3	:	0000000000000;	-- NOP
+	4	:	0000000000000;	-- NOP
 	5	:	0100100000101;	-- LDI $5  #Carrega acumulador com valor 5
-	6	:	0101100000000;	-- STA $0  #Armazena 5 na posição 0 da memória
+	6	:	0101000000000;	-- STA @0  #Armazena 5 na posição 0 da memória
 	7	:	1000000000000;	-- CEQ @0  #A Comparação deve fazer o flagIgual ser 1
 	8	:	0110000000010;	-- JMP @2  #Vai testar o flagIgual depois do jump
+	9	:	0000000000000;	-- NOP
 	10	:	0100100000100;	-- LDI $4  #Carrega acumulador com valor 4
 	11	:	1000000000000;	-- CEQ @0  #Compara com valor 5, deve fazer o flagIgual ser 0
 	12	:	0111000000011;	-- JEQ @3  #Não deve ocorrer o desvio
 	13	:	0110000001101;	-- JMP @13  #Fim. Deve ficar neste laço
+	14	:	0000000000000;	-- NOP
+	15	:	1010000000000;	-- RET  #Retorna para a posição 1
 END;

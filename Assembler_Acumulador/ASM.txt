@@ -4,7 +4,7 @@ JEQ .VAIPRANOVE	#Deve desviar para a posição 9
 NOP
 NOP
 VOA5: LDI $5	#Carrega acumulador com valor 5
-STA $0	#Armazena 5 na posição 0 da memória
+STA @0	#Armazena 5 na posição 0 da memória
 CEQ @0	#A Comparação deve fazer o flagIgual ser 1
 JMP @2	#Vai testar o flagIgual depois do jump
 VAIPRANOVE:
