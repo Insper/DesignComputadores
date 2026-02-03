@@ -95,4 +95,4 @@ A licença do software expira em 12 meses após a ativação. Para renovar um ar
 
 #### FONTE
 
-[httpswww.intel.comcontentwwwusendocsprogrammable68347224-2and-software-license.html](httpswww.intel.comcontentwwwusendocsprogrammable68347224-2and-software-license.html)
+[[httpswww.intel.comcontentwwwusendocsprogrammable68347224-2and-software-license.html](httpswww.intel.comcontentwwwusendocsprogrammable68347224-2and-software-license.html)](https://docs.altera.com/viewer/book-attachment/~W~bLexlK43NTwrQSRbgBg/mVJmWYY6qODaxIbAV1vcrQ-~W~bLexlK43NTwrQSRbgBg)
